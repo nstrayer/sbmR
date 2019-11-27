@@ -130,9 +130,9 @@ public:
   // Builds a id-id paired map of edge counts between nodes of the same level
   EdgeCounts gather_edge_counts(int level);
 
+  void set_node_parent(NodePtr node, NodePtr new_parent);
 
-
-  EdgeCounts* get_edge_counts(int level);
+  EdgeCounts* get_edge_counts(int level, bool force_calc = true);
 
 
   // Update network's internal edge counts map after structure change

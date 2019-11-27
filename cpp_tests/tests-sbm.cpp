@@ -91,7 +91,8 @@ TEST_CASE("Calculate Model entropy", "[SBM]")
 
   // Now we will actually move the desired node and test to see if entropy has changed
   // Move node
-  node_to_move->set_parent(to_group);
+  my_SBM.set_node_parent(node_to_move, to_group);
+  // node_to_move->set_parent(to_group);
 
   // Recalculate entropy
   double new_entropy = my_SBM.compute_entropy(0);
@@ -168,7 +169,6 @@ TEST_CASE("Agglomerative merge steps", "[SBM]")
   // Run again but this time merging the best 2
   SBM new_SBM = build_simple_SBM();
 
-  
   // Run greedy aglomerative merge with best single merge done
   Merge_Step double_merge = new_SBM.agglomerative_merge(1, 2, params);
 

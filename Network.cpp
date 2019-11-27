@@ -302,10 +302,15 @@ int Network::clean_empty_groups()
     {
       group_level->erase(group_id);
     }
+
+    // Recalculate the group edges
+    get_edge_counts(level, true);
     
     // Increment total groups deleted counter
     total_deleted += groups_to_delete.size();
   }
+
+
   
   return total_deleted;
 }                     
@@ -361,12 +366,29 @@ EdgeCounts Network::gather_edge_counts(int level)
   return e_rs;
 }
 
-EdgeCounts* Network::get_edge_counts(int level)
+
+void Network::set_node_parent(NodePtr node, NodePtr new_parent)
+{
+
+  if (node->parent->id == new_parent->id)
+  {
+    std::cout << "Trying to replace parent with current parent" << std::endl;
+  }
+  // Update cached edge counts
+  update_edge_counts(node, new_parent);
+
+  // Move node
+  node->set_parent(new_parent);
+}
+
+
+EdgeCounts* Network::get_edge_counts(int level, bool force_calc)
 {
   // First try and find the edge counts for level
 
   // If they dont exist, build them
-  if (edge_counts.find(level) == edge_counts.end())
+  bool doesnt_exist = edge_counts.find(level) == edge_counts.end();
+  if (doesnt_exist | force_calc)
   {
     // Build an edge count for this level and then we're done...
     edge_counts[level] = gather_edge_counts(level);
